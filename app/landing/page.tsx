@@ -59,7 +59,6 @@ const features = [
   },
 ];
 
-
 export default function LandingPage() {
   const { data: session } = useSession();
   const router = useRouter();
@@ -80,7 +79,7 @@ export default function LandingPage() {
             <div className="flex items-center space-x-2">
               <Rocket className="h-8 w-8 text-github-accent-fg" />
               <span className="text-xl font-bold text-github-fg-default">
-                Ascend
+                Lakshya
               </span>
             </div>
 
@@ -147,7 +146,7 @@ export default function LandingPage() {
               <p className="text-xl text-github-fg-muted max-w-3xl mx-auto mb-8 leading-relaxed">
                 Harness the power of AI to generate personalized learning paths.
                 Whether you&apos;re preparing for interviews, switching careers,
-                or mastering new technologies, Ascend creates the perfect
+                or mastering new technologies, Lakshya creates the perfect
                 roadmap for your journey.
               </p>
             </motion.div>{" "}
@@ -173,7 +172,6 @@ export default function LandingPage() {
                 <span>Try AI Chatbot</span>
               </Link>
             </motion.div>{" "}
-            
           </div>
         </div>
       </section>{" "}
@@ -270,9 +268,7 @@ export default function LandingPage() {
                 </p>
 
                 {index < 2 && (
-                  <div className="hidden md:block absolute top-8 left-full w-full">
-                    
-                  </div>
+                  <div className="hidden md:block absolute top-8 left-full w-full"></div>
                 )}
               </motion.div>
             ))}
@@ -313,7 +309,7 @@ export default function LandingPage() {
             <div className="flex items-center space-x-2 mb-4 md:mb-0">
               <Rocket className="h-8 w-8 text-github-accent-fg" />
               <span className="text-xl font-bold text-github-fg-default">
-                Ascend
+                Lakshya
               </span>
             </div>
 
@@ -349,7 +345,7 @@ export default function LandingPage() {
 
           <div className="mt-8 pt-8 border-t border-github-border-default text-center text-github-fg-muted">
             <p>
-              &copy; 2024 Ascend. All rights reserved. Built with ❤️ for
+              &copy; 2024 Lakshya. All rights reserved. Built with ❤️ for
               learners everywhere.
             </p>
           </div>

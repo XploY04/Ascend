@@ -7,7 +7,6 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
 import remarkEmoji from 'remark-emoji';
 import { File, ChevronDown, ChevronUp } from 'lucide-react';
-import TypeWriter from './TypeWriter';
 import { motion, AnimatePresence } from 'framer-motion';
 import 'github-markdown-css/github-markdown.css';
 
@@ -16,7 +15,6 @@ interface ReadmeViewerProps {
 }
 
 const ReadmeViewer: React.FC<ReadmeViewerProps> = ({ content }) => {
-  const [isTypingComplete, setIsTypingComplete] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
 
   // Custom components for ReactMarkdown
@@ -99,25 +97,23 @@ const ReadmeViewer: React.FC<ReadmeViewerProps> = ({ content }) => {
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <div className="p-8 markdown-body markdown-body-dark">
-              {!isTypingComplete ? (
-                <div className="prose prose-invert max-w-none">
-                  <TypeWriter 
-                    text={content} 
-                    speed={1}
-                    onComplete={() => setIsTypingComplete(true)}
-                  />
-                </div>
-              ) : (
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm, remarkEmoji]}
-                  rehypePlugins={[rehypeRaw, rehypeSanitize]}
-                  components={components}
-                >
-                  {content}
-                </ReactMarkdown>
-              )}
-            </div>
+            <motion.div 
+              className="p-8 markdown-body markdown-body-dark"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ 
+                duration: 0.6,
+                ease: [0.4, 0, 0.2, 1]
+              }}
+            >
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm, remarkEmoji]}
+                rehypePlugins={[rehypeRaw, rehypeSanitize]}
+                components={components}
+              >
+                {content}
+              </ReactMarkdown>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

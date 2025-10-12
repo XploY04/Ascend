@@ -64,7 +64,7 @@ async function generateTextGemini(prompt: string) {
     throw new Error("AI_KA_KEY environment variable is not set");
   }
   const genAI = new GoogleGenerativeAI(process.env.AI_KA_KEY);
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
   const result = await model.generateContent(prompt);
   const text = result.response.text();
   return text;

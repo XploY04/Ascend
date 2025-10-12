@@ -545,7 +545,15 @@ async function generateTextGemini(prompt: string) {
     throw new Error("AI_KA_KEY environment variable is not set");
   }
   const genAI = new GoogleGenerativeAI(process.env.AI_KA_KEY);
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  // Using stable Gemini 2.5 Flash - best price-performance
+  const model = genAI.getGenerativeModel({ 
+    model: "gemini-2.0-flash",
+    generationConfig: {
+      temperature: 0.7,
+      topP: 0.8,
+      topK: 40,
+    }
+  });
   const result = await model.generateContent(prompt);
   const text = result.response.text();
   return text;
@@ -690,15 +698,36 @@ export async function PUT(req: Request) {
     const resp = await generateTextGemini(
       promptText.replace("{prompt}", prompt)
     );
-    console.log("Raw Gemini response received");
+    console.log("Raw Gemini response received:", resp);
 
-    const cleanedResponse = resp
-      .replace(/```json\n/, "")
-      .replace(/\n```\n$/, "")
-      .trim();
+    // More robust JSON extraction
+    let cleanedResponse = resp.trim();
+    
+    // Remove markdown code blocks
+    cleanedResponse = cleanedResponse.replace(/```json\n?/g, "").replace(/```\n?/g, "");
+    
+    // Extract JSON object if there's extra text
+    const jsonMatch = cleanedResponse.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      cleanedResponse = jsonMatch[0];
+    }
+    
+    cleanedResponse = cleanedResponse.trim();
     console.log("Cleaned response:", cleanedResponse);
 
-    const { error, aspirations, timeline, notes } = JSON.parse(cleanedResponse);
+    let parsedData;
+    try {
+      parsedData = JSON.parse(cleanedResponse);
+    } catch (parseError) {
+      console.error("JSON parse error:", parseError);
+      console.error("Failed to parse:", cleanedResponse);
+      return NextResponse.json(
+        { error: true, message: "Failed to parse AI response. Please try again." },
+        { status: 500 }
+      );
+    }
+
+    const { error, aspirations, timeline, notes } = parsedData;
     console.log("Parsed validation data:", {
       error,
       timeline,

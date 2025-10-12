@@ -43,8 +43,8 @@ const RepositoryCard = ({
           <div className="relative">
             <div className="flex justify-between items-start gap-4">
               <div className="flex-1 min-w-0">
-                <h3 className="text-lg font-medium text-slate-100 truncate hover:text-blue-400 transition-colors duration-300">
-                  {title || name}
+                <h3 className="text-lg font-medium text-slate-100 truncate hover:text-blue-400 transition-colors duration-300" title={title || name}>
+                  {(title || name).length > 60 ? `${(title || name).substring(0, 60)}...` : (title || name)}
                 </h3>
                 {description && (
                   <p className="mt-2 text-sm text-slate-400 line-clamp-2 group-hover:text-slate-300 transition-colors duration-300">
