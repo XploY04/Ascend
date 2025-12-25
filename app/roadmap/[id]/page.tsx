@@ -17,6 +17,31 @@ import Header from "../../components/header";
 import Footer from "../../components/footer";
 import ReadmeViewer from "../../components/ReadmeViewer";
 
+// Helper function to format content with proper HTML
+const formatContent = (content: string): string => {
+  return content
+    .replace(/&lt;br\s*\/?&gt;/gi, "<br/>")
+    .replace(/<br\s*\/?>/gi, "<br/>")
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*\*/g, "") // Remove any remaining ** markers
+    .replace(
+      /\[([^\]]+)\]\(([^)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">$1</a>'
+    );
+};
+
+// Helper function to clean topic text
+const cleanTopicText = (topic: string): string => {
+  return topic
+    .replace(/&lt;br\s*\/?&gt;/gi, " ")
+    .replace(/<br\s*\/?>/gi, " ")
+    .replace(/\*\*/g, "")
+    .replace(/-\s*\*\*Description\*\*:.*$/gi, "")
+    .replace(/-\s*\*\*Resource\*\*:.*$/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
+};
+
 interface Resource {
   title: string;
   url: string;
@@ -229,10 +254,11 @@ export default function RoadmapPage({
                         section.completed ? "text-slate-300" : "text-slate-100"
                       }`}
                     >
-                      {section.title}
+                      {section.title.replace(/\*\*/g, "")}
                     </h3>
                     <p className="text-xs text-slate-400">
-                      {section.dayRange} • {section.focusArea}
+                      {section.dayRange.replace(/\*\*/g, "")} •{" "}
+                      {section.focusArea.replace(/\*\*/g, "")}
                     </p>
                   </div>
                 </div>
@@ -250,9 +276,12 @@ export default function RoadmapPage({
 
               {expandedSections[index] && (
                 <div className="p-4 pt-0 border-t border-slate-700/50">
-                  <p className="text-sm text-slate-300 my-3">
-                    {section.content}
-                  </p>
+                  <div
+                    className="text-sm text-slate-300 my-3 space-y-2"
+                    dangerouslySetInnerHTML={{
+                      __html: formatContent(section.content),
+                    }}
+                  />
 
                   {/* Topics */}
                   <div className="my-4">
@@ -265,7 +294,7 @@ export default function RoadmapPage({
                           key={i}
                           className="text-xs text-slate-300 bg-slate-700/70 rounded-full px-3 py-1"
                         >
-                          {topic}
+                          {cleanTopicText(topic)}
                         </span>
                       ))}
                     </div>
