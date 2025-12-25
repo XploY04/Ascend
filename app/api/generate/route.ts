@@ -547,7 +547,7 @@ async function generateTextGemini(prompt: string) {
   const genAI = new GoogleGenerativeAI(process.env.AI_KA_KEY);
   // Using stable Gemini 2.5 Flash - best price-performance
   const model = genAI.getGenerativeModel({ 
-    model: "gemini-2.0-flash",
+    model: "gemini-2.5-flash",
     generationConfig: {
       temperature: 0.7,
       topP: 0.8,
